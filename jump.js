@@ -22,7 +22,8 @@ const Jump = class Jump {
         let sBuffer = b.toString('hex');
 
         // Numéro de harnais
-        this.numHarness = dec_to_ascii(b[2]) + dec_to_ascii(b[3]) + dec_to_ascii(b[4]) + dec_to_ascii(b[5])
+        let numHarnessString = dec_to_ascii(b[2]) + dec_to_ascii(b[3]) + dec_to_ascii(b[4]) + dec_to_ascii(b[5])
+        this.numHarness = parseInt(numHarnessString, 10)
         
         // Numéro de la ligne
         this.numRecord = b[7];

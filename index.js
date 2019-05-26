@@ -9,7 +9,6 @@ const { serial } = require('./writeSerial');
 const url = "http://localhost:3333"
 const time = 3 * 60 * 1000
 const idFarmer = 59
-const time = 10000
 
 const socket = io(url);
 

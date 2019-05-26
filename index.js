@@ -1,15 +1,16 @@
+require('dotenv').config()
 const io = require('socket.io-client');
 const express = require('express');
 const app = express();
 const request = require('request');
 const { jumpsFromHarnessData } = require('./decoupe.js');
 const { serial } = require('./writeSerial');
-
-const url = "http://localhost:3333"
 const time = 4000
 const idFarmer = 59
 const numAlpha = 8
 
+const url = process.env.BASE_URL
+console.log(url)
 const socket = io(url);
 
 function activeConnection() {

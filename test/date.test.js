@@ -1,7 +1,7 @@
 var assert = require('assert');
-const { hexaVeeToDate, toMinsSecs, splitBuffer, toHours, toMonth, nbDaySinceDebMonth, toYears } = require('./calculDate');
+const { hexaVeeToDate, toMinsSecs, splitBuffer, toHours, toMonth, nbDaySinceDebMonth, toYears } = require('../calculDate');
 
-const { inverseStringBuffer } = require("./calculDate");
+const { inverseStringBuffer } = require("../calculDate");
 // Test des dates
 let dates = [
     {
@@ -121,7 +121,7 @@ let dates = [
         split: [77, 83, 3, 2575],
         real: new Date('2019-05-09T19:40:15.000'),
     },
-];
+]
 
 
 describe('Date converter', function () {
@@ -163,7 +163,6 @@ describe('Date converter', function () {
     });
 
     describe('toMonth', function () {
-
         dates.forEach(date => {
             let month = toMonth(date.split[0], date.split[1]);
             it('should have the same month ' + date.real, function () {

@@ -1,4 +1,5 @@
 const { formatDate, dec_to_ascii, replaceAt, reverseBytes } = require('./utils');
+
 const { hexaVeeToDate, inverseStringBuffer } = require('./calculDate');
 
 const Jump = class Jump { 

@@ -100,7 +100,6 @@ const hexaVeeToDate = function (buffer) {
     return new Date(firstDate)
 }
 let date = new Date()
-console.log(date.getFullYear());
 
 module.exports = { hexaVeeToDate, 
     toMinsSecs, 

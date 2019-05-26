@@ -9,7 +9,7 @@ const jumpsFromHarnessData = function (buffer) {
 
     for (var i = 34; i < buffer.length; i = i + 21) {
         let bufJump = buffer.slice(i, i + 21)
-        console.log(bufJump)
+        
         jumps.push(new Jump(bufJump));
     }
 

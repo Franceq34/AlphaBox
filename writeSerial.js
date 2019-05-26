@@ -1,6 +1,6 @@
 const SerialPort = require('serialport');
 
-const NB_TIMES_MAX_EMIT = 32
+const NB_TIMES_MAX_EMIT = 2
 const timeBetweenEmit = 1000
 const timeBetweenListen = 1000
 const timeWaitEndResponse = 3000
@@ -21,15 +21,19 @@ const openPortAntenna = async function () {
         baudRate: 57600
     });
 
-    return port;
+    return new Promise((resolve, reject) => {
+        port.open(() => {
+            console.log("open");
+            resolve(port);
+        })
+    });
 }
 
 
-const sendOrderAndWaitResponse = async function (order) {
+const sendOrderAndWaitResponse = async function (order, antenna) {
     // Met en route l'antenne
 
     return new Promise(async (resolve, reject) => {
-        const antenna = await openPortAntenna();
 
         sendOrderMultipleTimes(order, antenna);
 
@@ -41,7 +45,8 @@ const sendOrderAndWaitResponse = async function (order) {
             .catch(err => console.log(err))
 
         // Reset
-        antenna.close( () => {
+        antenna.close(() => {
+            console.log("PORT FERME")
             resolve(response);
         });
     });
@@ -52,8 +57,8 @@ const sendOrderAndWaitResponse = async function (order) {
  * ask 30 times around the box "retrieve data" of an harness
  * @param {number} numAlpha number of the asked alpha
  */
-const retrieveData = async function (numAlpha) {
-    return await sendOrderAndWaitResponse(`<3030303${numAlpha}UPLOADFILE>`);
+const retrieveData = async function (numAlpha, antenna) {
+    return await sendOrderAndWaitResponse(`<3030303${numAlpha}UPLOADFILE>`, antenna);
 }
 
 /**
@@ -78,14 +83,15 @@ async function getResponse(antenna) {
             if (receive != null && receive + timeWaitEndResponse < Date.now()) {
                 resolve("Done !");
             }
-            // si jamais de données reçus, on continu déécouter
+            // si jamais de données reçus, on continu d'écouter
             else {
                 setTimeout(checkResponse, timeBetweenListen);
             }
 
             // si on ne recoit pas de donnée pendant trop de temps, le harnais 
             // est surement trop loin de l'antenne.
-            if (nbTimeEmit > NB_TIMES_MAX_EMIT) {
+
+            if (nbTimeEmit >= NB_TIMES_MAX_EMIT) {
                 reject("To long");
             }
         };
@@ -100,7 +106,6 @@ async function getResponse(antenna) {
 }
 
 async function sendOrderMultipleTimes(order, antenna) {
-
     if (receive == null) {
         await sendOrder(order, antenna)
 
@@ -109,8 +114,8 @@ async function sendOrderMultipleTimes(order, antenna) {
         // On arrête au bout d'un certain nombre d'émissions.
         if (NB_TIMES_MAX_EMIT > nbTimeEmit) {
             setTimeout(async function () {
-                await sendOrder(order, antenna)
-            }, 1000);
+                await sendOrderMultipleTimes(order, antenna)
+            }, timeBetweenEmit);
         }
     }
 }

@@ -10,12 +10,17 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.18.0",
+<<<<<<< HEAD
     "chai": "^4.2.0",
+=======
+>>>>>>> 507e0e96ace1bc727a5a568661ae86401d631682
     "connect": "^3.6.6",
     "express": "^4.16.4",
     "mocha": "^6.1.4",
     "request": "^2.88.0",
     "serialport": "^7.1.5",
-    "serve-static": "^1.14.1"
+    "serve-static": "^1.14.1",
+    "socket.io": "^2.2.0",
+    "socket.io-client": "^2.2.0"
   }
 }

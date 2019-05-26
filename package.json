@@ -10,10 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.18.0",
-<<<<<<< HEAD
     "chai": "^4.2.0",
-=======
->>>>>>> 507e0e96ace1bc727a5a568661ae86401d631682
     "connect": "^3.6.6",
     "express": "^4.16.4",
     "mocha": "^6.1.4",

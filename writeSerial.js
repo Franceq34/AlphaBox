@@ -1,6 +1,6 @@
 const SerialPort = require('serialport');
 
-const NB_TIMES_MAX_EMIT = 2
+const NB_TIMES_MAX_EMIT = 35
 const timeBetweenEmit = 1000
 const timeBetweenListen = 1000
 const timeWaitEndResponse = 3000

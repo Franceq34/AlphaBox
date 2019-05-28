@@ -66,34 +66,37 @@ function getAlphasFromFarmer(idFarm, callback) {
 let antenna = null;
 
 const retrieveJumpsAlpha = async function (number) {
-	
-	return await serial.retrieveData(number, antenna).then(bufferHarness => {
-		if (bufferHarness != null) {
+
+	// Retrieve data from harness
+	return await serial.retrieveData(number, antenna)
+		.then(bufferHarness => {
 			let hexBuffData = (new Buffer.from(bufferHarness, 'hex'));
 			return jumpsFromHarnessData(hexBuffData);
-		} else {
-			return JSON.parse("{}");
-		}
-		
-	});
+		})
 }
 
 function boucle() {
-	activeConnection()
+	activeConnection();
+	retrieveJumpsAlpha(numAlpha)
+		.then(jumps => {
+			let bodyToSent = { data: jumps, idFarmer: idFarmer };
 
-	retrieveJumpsAlpha(numAlpha).then(jumps => {
-		let bodyToSent = { data: jumps, idFarmer: idFarmer };
-		console.log("a récupéré data", bodyToSent);
-
-		sendDataHarness(bodyToSent, () => {
-			// Recommence indéfiniment
-			setTimeout(boucle, time);
+			sendDataHarness(bodyToSent, () => {
+				// Recommence indéfiniment
+				setTimeout(boucle, time);
+			});
+		})
+		.catch(err => {
+			console.log("Error retrieve jumps", err)
+			return err;
 		});
-	});
+
+	console.log("HEY")
 }
-async function main () {
+
+async function main() {
 	antenna = await serial.openPortAntenna();
 	boucle();
 }
-main()
 
+main();

@@ -1,9 +1,19 @@
+// Module qui permet d'utiliser un port sérial (utilisation de l'antenne)
 const SerialPort = require('serialport');
 
+// Nb de fois que l'information est transmise à l'alpha
 const NB_TIMES_MAX_EMIT = 35
+
+// Temps entre deux émissions de l'information
 const timeBetweenEmit = 1000
+
+// Temps entre deux écoutes pour la récupération des données envoyées par l'alpha
 const timeBetweenListen = 1000
+
+// Temps qui permet d'attendre la fin de la réponse du harnais Alpha
 const timeWaitEndResponse = 3000
+
+// L'antenne doit être connectée sur un port usb (l'antenne doit être la seul à utiliser les ports USB)
 const portUsb = '/dev/ttyUSB0';
 
 
@@ -19,7 +29,7 @@ let continuListen = true;
 const openPortAntenna = async function () {
 
     // OUVERTURE DU PORT SERIAL
-    // Il ne doit y avoir que l'antenne branchée 
+    // Il ne doit y avoir que l'antenne de branchée sur les ports usb
     const port = new SerialPort(portUsb, {
         baudRate: 57600
     });
@@ -52,14 +62,14 @@ const openPortAntenna = async function () {
     });
 }
 
-
+// Envoie un ordre à envoyer à l'antenne, retourne la réponse de l'alpha
 const sendOrderAndWaitResponse = async function (order, antenna) {
     sendOrderMultipleTimes(order, antenna);
 
     // start wait the response, resolved when the response is full
     // Met en route l'antenne
     return new Promise ( async (resolve, reject) => {
-        await getResponse(antenna)
+        return getResponse()
         .then( (response) => {
             receive = null;
             buffer = "";
@@ -79,7 +89,7 @@ const sendOrderAndWaitResponse = async function (order, antenna) {
 /**
  * wait the entire response
  */
-async function getResponse(antenna) {
+async function getResponse() {
 
     // Quand les données commencent à arriver, on attends "timeWaitEndResponse"
     // avant de terminer l'écoute, les données arrivent par salves.
@@ -90,8 +100,7 @@ async function getResponse(antenna) {
 
         let checkResponse = function () {
             console.log("Ecoute");
-            // Si on a déjà recu et que le temps entre deux salve est longs
-            // on peut dire qu'il n'y en aura plus
+            // Arrête d'écouter quand on ne recoit plus de données pendant timeWaitEndResponse 
             
             if (!continuListen) {
                 reject("Error antenna");
@@ -117,7 +126,7 @@ async function getResponse(antenna) {
             }
         };
 
-        // On lance la fonction d'écoute pour la première fois
+        // On lance la fonction d'écoute
         checkResponse();
     })
     return waitResponse

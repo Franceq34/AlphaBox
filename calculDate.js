@@ -1,6 +1,6 @@
 
 /**
- * Transform an dsplit buffer date in hexadecimal and do the convertion to int
+ * Transform a split buffer date in hexadecimal and do the convertion to int
  * @param {Buffer} buffer 
  */
 function splitBuffer(buffer) {
@@ -101,6 +101,7 @@ const hexaVeeToDate = function (buffer) {
 }
 let date = new Date()
 
+// Pour les tests
 module.exports = { hexaVeeToDate, 
     toMinsSecs, 
     splitBuffer, 

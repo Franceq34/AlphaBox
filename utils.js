@@ -1,4 +1,4 @@
-
+// Converti de l'hexadecimal en string 
 const hex_to_ascii = function (str1) {
     var hex = str1.toString();
     var str = '';
@@ -9,6 +9,7 @@ const hex_to_ascii = function (str1) {
 
 }
 
+// Converti du decimal en string
 const dec_to_ascii = function (str1) {
     var hex = str1.toString();
     var str = '';
@@ -37,7 +38,6 @@ const reverseBytes = function(revBytes) {
     for (let i = revBytes.length - 2; i >= 0; i = i - 2) {
         byte += revBytes.substr(i, 2)
     }
-
     return byte;
 }
 
